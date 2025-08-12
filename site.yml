@@ -1,0 +1,5 @@
+---
+- hosts: linux
+  gather_facts: yes
+  roles:
+    - role: roles/ism_linux_audit
