@@ -1,4 +1,4 @@
-# ISM Linux Audit – Ansible Role (Madrock Advisory) DRAFT Work In Progress
+# ISM Linux Audit – Ansible Role - DRAFT Work In Progress
 
 ## Why
 Evidence-driven verification of Linux host alignment to ASD ISM controls, producing JSON/CSV/JUnit artefacts and syslog events for chain-of-custody.
