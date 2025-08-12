@@ -1,7 +1,7 @@
 # ISM Linux Audit – Ansible Role - DRAFT Work In Progress
 
 ## Why
-Evidence-driven verification of Linux host alignment to ASD ISM controls, producing JSON/CSV/JUnit artefacts and syslog events for chain-of-custody.
+Evidence-driven verification of Linux host alignment to ASD ISM controls, producing JSON/CSV/JUnit artefacts and syslog events for chain-of-custody. https://www.cyber.gov.au/resources-business-and-government/essential-cybersecurity/ism
 
 ## Who
 - Ops/SecOps to run and triage.
