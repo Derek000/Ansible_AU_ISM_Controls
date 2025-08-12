@@ -1,0 +1,59 @@
+---
+controls:
+  ISM-1506:
+    title: "Disable SSH v1"
+    ref: "ISM Secure Shell"
+  ISM-0484:
+    title: "SSH daemon secure settings"
+    ref: "ISM Secure Shell"
+  ISM-0485:
+    title: "SSH uses public key auth"
+    ref: "ISM Secure Shell"
+  ISM-0580:
+    title: "Event logging policy implemented"
+    ref: "ISM Event logging and monitoring"
+  ISM-1405:
+    title: "Centralised event logging facility"
+    ref: "ISM Event logging and monitoring"
+  ISM-1983:
+    title: "Logs sent to central facility ASAP"
+    ref: "ISM Event logging and monitoring"
+  ISM-1984:
+    title: "Logs encrypted in transit"
+    ref: "ISM Event logging and monitoring"
+  ISM-1985:
+    title: "Logs protected from unauthorised access"
+    ref: "ISM Event logging and monitoring"
+  ISM-1815:
+    title: "Logs protected from modification/deletion"
+    ref: "ISM Event logging and monitoring"
+  ISM-0988:
+    title: "Accurate and consistent time source"
+    ref: "ISM Event logging and monitoring"
+  ISM-1139:
+    title: "Only latest TLS"
+    ref: "ISM TLS"
+  ISM-1453:
+    title: "TLS Perfect Forward Secrecy"
+    ref: "ISM TLS"
+  ISM-1369:
+    title: "TLS AES-GCM"
+    ref: "ISM TLS"
+  ISM-1374:
+    title: "TLS SHA-2 certs"
+    ref: "ISM TLS"
+  ISM-1375:
+    title: "TLS SHA-2 HMAC/PRF"
+    ref: "ISM TLS"
+  ISM-1553:
+    title: "TLS compression disabled"
+    ref: "ISM TLS"
+  ISM-1707:
+    title: "Backups immutable vs privileged users"
+    ref: "ISM Backups"
+  ISM-1708:
+    title: "Backup admin cannot delete within retention"
+    ref: "ISM Backups"
+  ISM-1515:
+    title: "Restore test during DR exercises"
+    ref: "ISM Backups"

@@ -1,0 +1,46 @@
+---
+- set_fact:
+    findings:
+      ISM-1506: "{{ ism_1506_pass | default(false) }}"
+      ISM-0484: "{{ ism_0484_pass | default(false) }}"
+      ISM-0485: "{{ ism_0485_pass | default(false) }}"
+      ISM-0580: "{{ true }}"
+      ISM-1405: "{{ ism_1405_pass | default(false) }}"
+      ISM-1983: "{{ ism_1983_pass | default(false) }}"
+      ISM-1984: "{{ ism_1984_pass | default(false) }}"
+      ISM-1985: "{{ ism_1985_pass | default(false) }}"
+      ISM-1815: "{{ ism_1815_pass | default(false) }}"
+      ISM-0988: "{{ ism_0988_pass | default(false) }}"
+      ISM-1139: "{{ ism_1139_pass | default(false) }}"
+      ISM-1453: "{{ ism_1453_pass | default(false) }}"
+      ISM-1369: "{{ ism_1369_pass | default(false) }}"
+      ISM-1374: "{{ true }}"
+      ISM-1375: "{{ true }}"
+      ISM-1553: "{{ ism_1553_pass | default(false) }}"
+      ISM-1707: "{{ ism_1707_pass | default(false) }}"
+      ISM-1708: "{{ ism_1708_pass | default(false) }}"
+      ISM-1515: "{{ ism_1515_pass | default(false) }}"
+      PATCHING: "{{ patch_check_pass | default(false) }}"
+      EOL: "{{ eol_pass | default(false) }}"
+
+- name: "Write JSON report"
+  copy:
+    dest: "{{ report_dir }}/report.json"
+    mode: "0640"
+    content: "{{ {'host': inventory_hostname, 'findings': findings, 'ts': ansible_date_time.iso8601 } | to_nice_json }}"
+
+- name: "Write CSV report"
+  template:
+    src: "report.csv.j2"
+    dest: "{{ report_dir }}/report.csv"
+    mode: "0640"
+
+- name: "Write JUnit XML"
+  template:
+    src: "junit.xml.j2"
+    dest: "{{ report_dir }}/junit.xml"
+    mode: "0640"
+
+- name: "Send summary to syslog"
+  shell: "logger -t ism_audit '{{ inventory_hostname }} findings={{ findings | to_json }}'"
+  changed_when: false

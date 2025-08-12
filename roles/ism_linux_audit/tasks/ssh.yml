@@ -1,0 +1,30 @@
+---
+- name: "Check SSH Protocol version (ISM-1506)"
+  command: "sshd -T"
+  register: sshd_config
+  changed_when: false
+  failed_when: false
+
+- set_fact:
+    ism_1506_pass: "{{ 'protocol 2' in sshd_config.stdout | default('') | lower or ('protocol' not in sshd_config.stdout | default('') | lower) }}"
+
+- name: "Check SSH daemon secure settings (ISM-0484)"
+  vars:
+    req:
+      - "permitrootlogin no"
+      - "permitemptypasswords no"
+      - "x11forwarding no"
+      - "allowtcpforwarding no"
+      - "gatewayports no"
+  set_fact:
+    ism_0484_missing: "{{ req | difference((sshd_config.stdout_lines | default([]) | map('lower')) | list) }}"
+    ism_0484_pass: "{{ ism_0484_missing | length == 0 }}"
+
+- name: "Check public key auth enabled (ISM-0485)"
+  command: "sshd -T"
+  register: sshd_t_again
+  changed_when: false
+  failed_when: false
+
+- set_fact:
+    ism_0485_pass: "{{ 'pubkeyauthentication yes' in (sshd_t_again.stdout | default('') | lower) }}"

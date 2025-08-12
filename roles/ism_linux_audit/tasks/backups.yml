@@ -1,0 +1,18 @@
+---
+- name: "Detect immutable backups (snapshots/WORM) – heuristic"
+  shell: |
+    test -f /etc/backup_policy.md && grep -Ei 'immutable|WORM|Object Lock|snapshot' /etc/backup_policy.md || true
+  register: bpol
+  changed_when: false
+
+- set_fact:
+    ism_1707_pass: "{{ (bpol.stdout | default('')) | length > 0 }}"
+    ism_1708_pass: "{{ (bpol.stdout | default('')) | length > 0 }}"
+
+- name: "Evidence of restore testing in last 12 months"
+  shell: "find /var/log -type f -iname '*dr*restore*' -mtime -365 2>/dev/null | head -n 1"
+  register: dr_restore
+  changed_when: false
+
+- set_fact:
+    ism_1515_pass: "{{ (dr_restore.stdout | default('')) | length > 0 }}"

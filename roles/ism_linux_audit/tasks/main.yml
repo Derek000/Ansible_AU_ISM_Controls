@@ -1,0 +1,28 @@
+---
+- name: "Create report directory"
+  file:
+    path: "{{ report_dir }}"
+    state: directory
+    mode: "0750"
+
+- name: "Include SSH hardening audit"
+  include_tasks: ssh.yml
+
+- name: "Include logging/SIEM audit"
+  include_tasks: logging.yml
+
+- name: "Include patching audit"
+  include_tasks: patching.yml
+
+- name: "Include TLS audit"
+  include_tasks: tls.yml
+
+- name: "Include backup controls audit"
+  include_tasks: backups.yml
+
+- name: "Optionally run dev-sec linux-baseline (InSpec)"
+  include_tasks: inspec.yml
+  when: enable_inspec_baseline | bool
+
+- name: "Compile and write reports"
+  include_tasks: report.yml

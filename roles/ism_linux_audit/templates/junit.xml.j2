@@ -1,0 +1,7 @@
+<testsuite name="ISM Linux Audit" tests="{{ findings|length }}">
+{% for k,v in findings.items() -%}
+  <testcase classname="ism.audit" name="{{ k }}">
+    {% if not v -%}<failure type="noncompliance">Control {{ k }} not satisfied.</failure>{% endif %}
+  </testcase>
+{% endfor -%}
+</testsuite>

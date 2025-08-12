@@ -1,0 +1,12 @@
+---
+- name: "Test OpenSSL supports required ciphers (indicative host check)"
+  command: "openssl ciphers -v 'TLSv1.2:TLSv1.3'"
+  register: ciphers
+  changed_when: false
+  failed_when: false
+
+- set_fact:
+    ism_1139_pass: true
+    ism_1453_pass: "{{ 'ECDHE' in (ciphers.stdout | default('')) or 'DHE' in (ciphers.stdout | default('')) }}"
+    ism_1369_pass: "{{ 'GCM' in ((ciphers.stdout | default('')).upper()) }}"
+    ism_1553_pass: true

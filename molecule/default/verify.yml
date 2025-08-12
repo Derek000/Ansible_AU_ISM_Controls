@@ -1,0 +1,18 @@
+---
+- name: Verify artefacts
+  hosts: all
+  tasks:
+    - name: Check report directory exists
+      stat:
+        path: "/var/tmp/ism_audit"
+      register: rpt
+    - name: Assert report dir
+      assert:
+        that:
+          - rpt.stat.exists
+    - name: Assert JSON report present
+      stat:
+        path: "/var/tmp/ism_audit/report.json"
+      register: jsonr
+    - assert:
+        that: jsonr.stat.exists

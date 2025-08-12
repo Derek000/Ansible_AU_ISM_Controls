@@ -1,0 +1,39 @@
+---
+- name: "Detect rsyslog or journald remote forwarding"
+  shell: |
+    if [ -f /etc/rsyslog.conf ] || ls /etc/rsyslog.d/*.conf >/dev/null 2>&1; then
+      grep -E '^\s*\*\.|action\(.*target=' -R /etc/rsyslog* 2>/dev/null || true
+    elif command -v journalctl >/dev/null 2>&1; then
+      grep -R 'ForwardToSyslog=yes\|ForwardToHTTP=' /etc/systemd/journald.conf 2>/dev/null || true
+    fi
+  register: log_forwarding
+  changed_when: false
+
+- set_fact:
+    ism_1405_pass: "{{ (log_forwarding.stdout | default('')) | length > 0 }}"
+    ism_1983_pass: "{{ ism_1405_pass }}"
+
+- name: "Check log transport encryption configured (ISM-1984)"
+  shell: "grep -R 'StreamDriverAuthMode' /etc/rsyslog* 2>/dev/null || true"
+  register: log_tls
+  changed_when: false
+
+- set_fact:
+    ism_1984_pass: "{{ (log_tls.stdout | default('')) | length > 0 }}"
+
+- name: "Check log file permissions (ISM-1985/1815)"
+  shell: "find /var/log -maxdepth 2 -type f -perm -o+w 2>/dev/null"
+  register: world_writable_logs
+  changed_when: false
+
+- set_fact:
+    ism_1985_pass: "{{ (world_writable_logs.stdout | default('')) | length == 0 }}"
+    ism_1815_pass: "{{ (world_writable_logs.stdout | default('')) | length == 0 }}"
+
+- name: "Check NTP/leap seconds/time source accuracy (ISM-0988)"
+  shell: "timedatectl show 2>/dev/null | grep -E 'NTPSynchronized=yes|SystemClockSynchronized=yes' || true"
+  register: ntp_stat
+  changed_when: false
+
+- set_fact:
+    ism_0988_pass: "{{ 'yes' in (ntp_stat.stdout | default('') | lower) }}"

@@ -1,0 +1,13 @@
+---
+ism_applicability: "NC"   # NC | OS | P | S | TS
+enable_inspec_baseline: false
+inspec_profile_url: "https://github.com/dev-sec/linux-baseline/releases/download/2.9.0/linux-baseline-2.9.0.tar.gz"
+report_dir: "/var/tmp/ism_audit"
+siem_target: "udp://192.0.2.10:514"
+services_to_check_tls:
+  - name: "sshd"
+    test_cmd: "sshd -T"
+    port: 22
+ntp_sources_expected:
+  - "pool.ntp.org"
+  - "time.cloudflare.com"

@@ -1,0 +1,16 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: delegated
+platforms:
+  - name: instance
+    groups: ["linux"]
+provisioner:
+  name: ansible
+  inventory:
+    host_vars: {}
+  env:
+    ANSIBLE_STDOUT_CALLBACK: yaml
+verifier:
+  name: testinfra

@@ -1,0 +1,29 @@
+---
+- name: "Check package update posture"
+  shell: |
+    if command -v apt >/dev/null; then
+      apt update -o Debug::NoLocking=1 >/dev/null 2>&1
+      apt -s upgrade | grep -E '^[0-9]+ upgraded' || true
+    elif command -v dnf >/dev/null; then
+      dnf check-update --refresh >/dev/null 2>&1
+      dnf updateinfo --secseverity=Critical list available || true
+    elif command -v zypper >/dev/null; then
+      zypper refresh >/dev/null 2>&1
+      zypper lp -g security || true
+    fi
+  register: patch_output
+  changed_when: false
+
+- set_fact:
+    patch_critical_available: "{{ 'Critical' in (patch_output.stdout | default('')) }}"
+    patch_check_pass: "{{ not patch_critical_available }}"
+
+- name: "Detect distro EOL"
+  shell: |
+    . /etc/os-release 2>/dev/null || true
+    echo "$ID $VERSION_ID"
+  register: osrel
+  changed_when: false
+
+- set_fact:
+    eol_pass: "{{ 'centos 7' not in (osrel.stdout | default('') | lower) }}"
